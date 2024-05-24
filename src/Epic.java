@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Epic extends Task{
+public class Epic extends Task {
     private final ArrayList<Integer> subTaskList = new ArrayList<>();
 
     public Epic(String name, String description) {

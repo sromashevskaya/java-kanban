@@ -51,7 +51,7 @@ public class Manager {
 
     public int createTask(Task newTask) {
         newTask.setTaskId(id++);
-        this.task.put(newTask.getTaskId(), newTask);
+        task.put(newTask.getTaskId(), newTask);
         return newTask.getTaskId();
     }
 

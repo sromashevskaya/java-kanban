@@ -3,7 +3,7 @@ public class Main {
 
         Manager manager = new Manager();
 
-        Task task1 = new Task("Автоматизировать механизм возврата платежей","Выставить ручку, которая будет отвечать за возврат платежей клиенту", Status.NEW);
+        Task task1 = new Task("Автоматизировать механизм возврата платежей", "Выставить ручку, которая будет отвечать за возврат платежей клиенту", Status.NEW);
         manager.createTask(task1);
 
         SubTask subTask1 = new SubTask("Доработать модель данных", "Добавить новые поля", Status.NEW);
