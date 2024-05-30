@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
-//    private final List<tasks.Task> history = new ArrayList<>();
 
     private final LinkedList<Task> history = new LinkedList<>();
     private final static int MAX_SIZE = 10;
