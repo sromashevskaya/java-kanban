@@ -1,10 +1,12 @@
 import static org.junit.jupiter.api.Assertions.*;
 
+import manager.Managers;
+import manager.TaskManager;
 import org.junit.jupiter.api.Test;
 
 class ManagersTest {
 
-    TaskManager taskManager = Managers.getDefault();
+    private final TaskManager taskManager = Managers.getDefault();
 
     @Test
     void ShouldManagerBeNotNull() {

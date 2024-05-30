@@ -1,14 +1,15 @@
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
+import tasks.Epic;
 
 class EpicTest {
 
-    Epic epic1 = new Epic("Реализовать историю платежей", "Добавить новый сервис");
-    Epic epic2 = new Epic("Реализовать историю платежей", "Добавить новый сервис");
+    private final Epic epic1 = new Epic("Реализовать историю платежей", "Добавить новый сервис");
+    private final Epic epic2 = new Epic("Реализовать историю платежей", "Добавить новый сервис");
 
-    int id1 = epic1.getTaskId();
-    int id2 = epic2.getTaskId();
+    private final int id1 = epic1.getTaskId();
+    private final int id2 = epic2.getTaskId();
 
     @Test
     void ShouldBeEqualId() {

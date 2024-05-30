@@ -1,9 +1,14 @@
 import static org.junit.jupiter.api.Assertions.*;
 
+import manager.Managers;
+import manager.TaskManager;
 import org.junit.jupiter.api.Test;
+import tasks.Status;
+import tasks.SubTask;
+import tasks.Task;
 
 class InMemoryTaskManagerTest {
-    TaskManager taskManager = Managers.getDefault();
+    private final TaskManager taskManager = Managers.getDefault();
 
     @Test
     void ShouldAddTaskAndCanFindItById() {
@@ -27,7 +32,7 @@ class InMemoryTaskManagerTest {
     @Test
     void ShouldBeCorrespondingParametersValues() {
         Task task = new Task("Задача", "Описание", Status.NEW);
-        //  Task task2 = new Task("Задача1", "Описание2", Status.NEW);
+        //  tasks.Task task2 = new tasks.Task("Задача1", "Описание2", tasks.Status.NEW);
 
         taskManager.createTask(task);
 
@@ -39,7 +44,7 @@ class InMemoryTaskManagerTest {
     @Test
     void ShouldBeCorrespondingIDsForSettedIdAndGeneratedId() {
         Task task = new Task("Задача", "Описание", Status.NEW);
-        //  Task task2 = new Task("Задача1", "Описание2", Status.NEW);
+        //  tasks.Task task2 = new tasks.Task("Задача1", "Описание2", tasks.Status.NEW);
 
         taskManager.createTask(task);
 

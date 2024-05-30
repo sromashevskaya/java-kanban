@@ -1,6 +1,10 @@
 import static org.junit.jupiter.api.Assertions.*;
 
+import manager.HistoryManager;
+import manager.Managers;
 import org.junit.jupiter.api.Test;
+import tasks.Status;
+import tasks.Task;
 
 import java.util.List;
 
