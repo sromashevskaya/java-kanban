@@ -1,7 +1,7 @@
 import static org.junit.jupiter.api.Assertions.*;
 
-import manager.Managers;
-import manager.TaskManager;
+import manager.service.Managers;
+import manager.service.TaskManager;
 import org.junit.jupiter.api.Test;
 
 class ManagersTest {
