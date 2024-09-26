@@ -6,13 +6,10 @@ import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    //  private final LinkedList<Task> history = new LinkedList<>();
-
     private Node<Task> first;
     private Node<Task> last;
 
     private Map<Integer, Node<Task>> history = new LinkedHashMap<>();
-    // private final static int MAX_SIZE = 10;
 
 
     @Override
@@ -65,17 +62,14 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
     }
 
-    @Override
     public ArrayList<Task> getHistory() {
-        ArrayList<Task> tasks = new ArrayList<>();
-        Iterator<Node<Task>> iterator = history.values().iterator();
-
-        while (iterator.hasNext()) {
-            Node<Task> taskNode = iterator.next();
-            tasks.add(taskNode.data);
+        ArrayList<Task> history = new ArrayList<>();
+        Node<Task> current = first;
+        while (current != null) {
+            history.add(current.data);
+            current = current.next;
         }
-
-        return tasks;
+        return history;
     }
 
     private class Node<T> {
