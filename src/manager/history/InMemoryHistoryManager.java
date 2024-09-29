@@ -14,6 +14,9 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void add(Task task) {
+        if (task == null) {
+            return;
+        }
         remove(task.getTaskId());
         linkLast(task);
     }
@@ -62,6 +65,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
     }
 
+    @Override
     public ArrayList<Task> getHistory() {
         ArrayList<Task> history = new ArrayList<>();
         Node<Task> current = first;
