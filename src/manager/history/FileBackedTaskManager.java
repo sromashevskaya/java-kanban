@@ -12,7 +12,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private final File file;
 
-    private final String header = "id,type,name,status,description,epic";
+    private static final String header = "id,type,name,status,description,epic";
+
+    private static String fileName = "sprint7.csv";
 
 
     public FileBackedTaskManager(HistoryManager historyManager, File file) {
@@ -98,7 +100,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
 
     public void save() {
-        String fileName = "sprint7.csv";
         try (Writer writer = new BufferedWriter(new FileWriter(fileName))) {
             writer.write(header + "\n");
 
@@ -205,7 +206,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
