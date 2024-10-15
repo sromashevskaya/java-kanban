@@ -1,3 +1,4 @@
+import manager.history.FileBackedTaskManager;
 import manager.service.Managers;
 import manager.service.TaskManager;
 import tasks.Epic;
@@ -5,41 +6,23 @@ import tasks.Status;
 import tasks.SubTask;
 import tasks.Task;
 
+import java.io.File;
+
 public class Main {
     public static void main(String[] args) {
 
+        File file = new File("sprint7.csv");
+        FileBackedTaskManager fileManager = new FileBackedTaskManager(Managers.getHistoryManager(), file);
 
-        TaskManager taskManager = Managers.getDefault();
+        Task task = new Task("Автоматизировать механизм возврата платежей", "Выставить ручку, которая будет отвечать за возврат платежей клиенту", Status.NEW);
 
-        Task task1 = new Task("Автоматизировать механизм возврата платежей", "Выставить ручку, которая будет отвечать за возврат платежей клиенту", Status.NEW);
-        taskManager.createTask(task1);
+        Epic epic = new Epic("Подключить нового провайдера", "Выставить ручку, которая будет отвечать за возврат платежей клиенту");
 
-        SubTask subTask1 = new SubTask("Доработать модель данных", "Добавить новые поля", Status.NEW);
+        SubTask subTask = new SubTask("Доработать модель данных", "Добавить новые поля", Status.NEW, 1);
 
-        Epic epic1 = new Epic("Подключить нового провайдера", "Выставить ручку, которая будет отвечать за возврат платежей клиенту");
-        taskManager.createEpic(epic1);
-
-        subTask1.setEpicId(epic1.getTaskId());
-        taskManager.updateEpic(new Epic("Подключить нового провайдера", "Доработать модель данных", 1));
-        taskManager.updateTask(new Task("Автоматизировать механизм возврата платежей", "Интегрироваться с корбанкингом", 1, Status.IN_PROGRESS));
-        taskManager.createSubTask(subTask1);
-        subTask1.setStatus(Status.DONE);
-        taskManager.updateSubTask(subTask1);
-
-        System.out.println(taskManager.getAllEpicTasks());
-        System.out.println(taskManager.getAllSubTasks());
-        System.out.println(taskManager.getAllTasks());
-
-        System.out.println(taskManager.getEpicById(1));
-        System.out.println(taskManager.getTaskById(1));
-
-        //   taskManager.deleteAllTasks();
-        //   taskManager.deleteAllEpicTasks();
-        //   taskManager.deleteAllSubTasks();
-
-        System.out.println(taskManager.getAllTasks());
-
-        printAllTasks(taskManager);
+        fileManager.createTask(task);
+        fileManager.createEpic(epic);
+        fileManager.createSubTask(subTask);
     }
 
     private static void printAllTasks(TaskManager manager) {
