@@ -68,9 +68,9 @@ class InMemoryTaskManagerTest {
         assertEquals(task1.getDescription(), "Описание1", "Описание предыдущей задачи изменилось");
         assertEquals(task1.getStatus(), Status.IN_PROGRESS, "Статус предыдущей задачи изменился");
     }
-    
+
     @Test
-    public void shouldCheckSubTasksWithNewStatus() {
+    public void ShouldCheckSubTasksWithNewStatus() {
         final TaskManager taskManager1 = Managers.getDefault();
         taskManager1.deleteAllSubTasks();
         taskManager1.deleteAllEpicTasks();
@@ -88,7 +88,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void shouldCheckSubTasksWithDoneStatus() {
+    public void ShouldCheckSubTasksWithDoneStatus() {
         Epic epic = new Epic("Эпик 1", "Описание эпика 1");
         taskManager.createEpic(epic);
         epic.setStartTime(LocalDateTime.now().plusMinutes(10));
@@ -102,7 +102,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void shouldCheckSubTasksWithNewAndDoneStatus() {
+    public void ShouldCheckSubTasksWithNewAndDoneStatus() {
         Epic epic = new Epic("Эпик 1", "Описание эпика 1");
         taskManager.createEpic(epic);
         epic.setStartTime(LocalDateTime.now().plusMinutes(10));
@@ -114,7 +114,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void shouldCheckSubTasksWithInProgressStatus() {
+    public void ShouldCheckSubTasksWithInProgressStatus() {
         Epic epic = new Epic("Эпик 1", "Описание эпика 1");
         taskManager.createEpic(epic);
         epic.setStartTime(LocalDateTime.now().plusMinutes(10));
@@ -124,6 +124,24 @@ class InMemoryTaskManagerTest {
         taskManager.createSubTask(subTask2);
         assertSame(epic.getStatus(), Status.IN_PROGRESS);
     }
+
+    @Test
+    void ShouldNotHaveTimeConflicts() {
+        Epic epic = new Epic("Эпик 1", "Описание эпика 1");
+        taskManager.createEpic(epic);
+
+        SubTask subTask1 = new SubTask("Подзадача 1", "Описание 1", Status.IN_PROGRESS, epic.getTaskId(), Duration.ofMinutes(3), LocalDateTime.now().plusMinutes(4));
+        SubTask subTask2 = new SubTask("Подзадача 2", "Описание 2", Status.IN_PROGRESS, epic.getTaskId(), Duration.ofMinutes(3), LocalDateTime.now().plusMinutes(1));
+
+        taskManager.createSubTask(subTask1);
+
+        IllegalArgumentException checkForTimeConflictsException = assertThrows(IllegalArgumentException.class, () -> {
+            taskManager.createSubTask(subTask2);
+        }, "В указанное время уже есть задача");
+
+        assertEquals("В указанное время уже есть задача", checkForTimeConflictsException.getMessage());
+    }
+
 
 
 }
