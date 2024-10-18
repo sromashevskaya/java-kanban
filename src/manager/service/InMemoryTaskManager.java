@@ -183,7 +183,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteSubTaskById(int id) {
         SubTask newSubTask = getSubTaskById(id);
         Epic newEpic = epic.get(newSubTask.getEpicById());
-        newEpic.removeSubTaskByEpicId(id);
+     //   newEpic.removeSubTaskByEpicId(id);
         calculateDurationAndTime(newEpic);
         prioritizedTasks.removeIf(subtask -> subtask.equals(getSubTaskById(id)));
         subTask.remove(id);

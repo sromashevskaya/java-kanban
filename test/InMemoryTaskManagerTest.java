@@ -68,12 +68,7 @@ class InMemoryTaskManagerTest {
         assertEquals(task1.getDescription(), "Описание1", "Описание предыдущей задачи изменилось");
         assertEquals(task1.getStatus(), Status.IN_PROGRESS, "Статус предыдущей задачи изменился");
     }
-
- /*   Для расчёта статуса Epic. Граничные условия:
-    a. Все подзадачи со статусом NEW.
-    b. Все подзадачи со статусом DONE.
-    c. Подзадачи со статусами NEW и DONE.
-    d. Подзадачи со статусом IN_PROGRESS. */
+    
     @Test
     public void shouldCheckSubTasksWithNewStatus() {
         final TaskManager taskManager1 = Managers.getDefault();
