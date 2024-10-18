@@ -2,10 +2,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import manager.service.Managers;
 import manager.service.TaskManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tasks.Epic;
 import tasks.Status;
 import tasks.SubTask;
 import tasks.Task;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 class InMemoryTaskManagerTest {
     private final TaskManager taskManager = Managers.getDefault();
@@ -63,5 +68,67 @@ class InMemoryTaskManagerTest {
         assertEquals(task1.getDescription(), "Описание1", "Описание предыдущей задачи изменилось");
         assertEquals(task1.getStatus(), Status.IN_PROGRESS, "Статус предыдущей задачи изменился");
     }
+
+ /*   Для расчёта статуса Epic. Граничные условия:
+    a. Все подзадачи со статусом NEW.
+    b. Все подзадачи со статусом DONE.
+    c. Подзадачи со статусами NEW и DONE.
+    d. Подзадачи со статусом IN_PROGRESS. */
+    @Test
+    public void shouldCheckSubTasksWithNewStatus() {
+        final TaskManager taskManager1 = Managers.getDefault();
+        taskManager1.deleteAllSubTasks();
+        taskManager1.deleteAllEpicTasks();
+        taskManager1.deleteAllTasks();
+        Epic epic = new Epic("Эпик 1", "Описание эпика 1");
+        taskManager1.createEpic(epic);
+        epic.setStartTime(LocalDateTime.now().plusMinutes(1));
+        SubTask subTask1 = new SubTask("Подзадача 1", "Описание 1", Status.NEW, epic.getTaskId(), Duration.ofMinutes(2), LocalDateTime.now());
+        SubTask subTask2 = new SubTask("Подзадача 2", "Описание 2", Status.NEW, epic.getTaskId(), Duration.ofMinutes(3), LocalDateTime.now().plusMinutes(4));
+        SubTask subTask3 = new SubTask("Подзадача 3", "Описание 3", Status.NEW, epic.getTaskId(), Duration.ofMinutes(5), LocalDateTime.now().plusMinutes(10));
+        taskManager1.createSubTask(subTask1);
+        taskManager1.createSubTask(subTask2);
+        taskManager1.createSubTask(subTask3);
+        assertSame(Status.NEW, epic.getStatus());
+    }
+
+    @Test
+    public void shouldCheckSubTasksWithDoneStatus() {
+        Epic epic = new Epic("Эпик 1", "Описание эпика 1");
+        taskManager.createEpic(epic);
+        epic.setStartTime(LocalDateTime.now().plusMinutes(10));
+        SubTask subTask1 = new SubTask("Подзадача 1", "Описание 1", Status.DONE, epic.getTaskId(), Duration.ofMinutes(2), LocalDateTime.now());
+        SubTask subTask2 = new SubTask("Подзадача 2", "Описание 2", Status.DONE, epic.getTaskId(), Duration.ofMinutes(3), LocalDateTime.now().plusMinutes(4));
+        SubTask subTask3 = new SubTask("Подзадача 3", "Описание 3", Status.DONE, epic.getTaskId(), Duration.ofMinutes(5), LocalDateTime.now().plusMinutes(10));
+        taskManager.createSubTask(subTask1);
+        taskManager.createSubTask(subTask2);
+        taskManager.createSubTask(subTask3);
+        assertSame(Status.DONE, epic.getStatus());
+    }
+
+    @Test
+    public void shouldCheckSubTasksWithNewAndDoneStatus() {
+        Epic epic = new Epic("Эпик 1", "Описание эпика 1");
+        taskManager.createEpic(epic);
+        epic.setStartTime(LocalDateTime.now().plusMinutes(10));
+        SubTask subTask = new SubTask("Подзадача 1", "Описание 1", Status.NEW, epic.getTaskId(), Duration.ofMinutes(2), LocalDateTime.now());
+        SubTask subTask2 = new SubTask("Подзадача 2", "Описание 2", Status.DONE, epic.getTaskId(), Duration.ofMinutes(3), LocalDateTime.now().plusMinutes(4));
+        taskManager.createSubTask(subTask);
+        taskManager.createSubTask(subTask2);
+        assertSame(Status.IN_PROGRESS, epic.getStatus());
+    }
+
+    @Test
+    public void shouldCheckSubTasksWithInProgressStatus() {
+        Epic epic = new Epic("Эпик 1", "Описание эпика 1");
+        taskManager.createEpic(epic);
+        epic.setStartTime(LocalDateTime.now().plusMinutes(10));
+        SubTask subTask = new SubTask("Подзадача 1", "Описание 1", Status.IN_PROGRESS, epic.getTaskId(), Duration.ofMinutes(3), LocalDateTime.now().plusMinutes(4));
+        SubTask subTask2 = new SubTask("Подзадача 2", "Описание 2", Status.IN_PROGRESS, epic.getTaskId(), Duration.ofMinutes(3), LocalDateTime.now().plusMinutes(10));
+        taskManager.createSubTask(subTask);
+        taskManager.createSubTask(subTask2);
+        assertSame(epic.getStatus(), Status.IN_PROGRESS);
+    }
+
 
 }
