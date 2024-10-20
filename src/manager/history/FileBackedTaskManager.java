@@ -6,15 +6,17 @@ import manager.service.Managers;
 import tasks.*;
 
 import java.io.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private final File file;
 
-    private static final String header = "id,type,name,status,description,epic";
+    private static final String Header = "id,type,name,status,description,epic,duration,startTime";
 
-    private static String fileName = "sprint7.csv";
+    private static String fileName = "sprint8.csv";
 
 
     public FileBackedTaskManager(HistoryManager historyManager, File file) {
@@ -101,7 +103,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     public void save() {
         try (Writer writer = new BufferedWriter(new FileWriter(fileName))) {
-            writer.write(header + "\n");
+            writer.write(Header + "\n");
 
             saveTasks(writer);
 
@@ -145,7 +147,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             type = TaskType.TASK;
         }
 
-        return String.join(",", String.valueOf(task.getTaskId()), type.toString(), task.getName(), task.getStatus().toString(), task.getDescription(), epicId) + "\n";
+        return String.join(",", String.valueOf(task.getTaskId()), type.toString(), task.getName(), task.getStatus().toString(), task.getDescription(), epicId, task.getDuration().toString(), task.getStartTime().toString()) + "\n";
     }
 
     public Task fromString(String value) {
@@ -154,6 +156,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         String name = split[2];
         Status status = Status.valueOf(split[3]);
         String description = split[4];
+        Duration duration = Duration.ofMinutes(Integer.parseInt(split[6]));
+        LocalDateTime startTime = LocalDateTime.parse(split[7]);
 
         Task task;
 
@@ -161,14 +165,14 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
         switch (type) {
             case TASK:
-                task = new Task(name, description, status);
+                task = new Task(name, description, status, duration, startTime);
                 break;
             case EPIC:
-                task = new Epic(name, description, id, status);
+                task = new Epic(name, description, id, status, duration, startTime);
                 break;
             case SUBTASK:
                 int epicId = Integer.parseInt(split[5]);
-                task = new SubTask(name, description, status, epicId);
+                task = new SubTask(name, description, status, epicId, duration, startTime);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown task type: " + type);
@@ -176,7 +180,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
         task.setTaskId(id);
         task.setTaskType(type);
-
         return task;
     }
 
@@ -186,7 +189,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                if (line.isBlank() || line.equals(fileBackedTaskManager.header)) {
+                if (line.isBlank() || line.equals(fileBackedTaskManager.Header)) {
                     continue;
                 }
 
@@ -210,11 +213,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FileBackedTaskManager that = (FileBackedTaskManager) o;
-        return Objects.equals(file, that.file) && Objects.equals(header, that.header);
+        return Objects.equals(file, that.file) && Objects.equals(Header, that.Header);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(file, header);
+        return Objects.hash(file, Header);
     }
 }

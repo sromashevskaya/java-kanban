@@ -1,5 +1,7 @@
 package tasks;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task {
@@ -8,6 +10,8 @@ public class Task {
     protected int taskId;
     protected Status status;
     protected TaskType taskType;
+    protected Duration duration = Duration.ofMinutes(0);
+    protected LocalDateTime startTime;
 
     public Task(String name, String description, int taskId, Status status) {
         this.name = name;
@@ -31,6 +35,23 @@ public class Task {
         this.name = name;
         this.description = description;
         this.taskId = taskId;
+    }
+
+    public Task(String name, String description, Status status, Duration duration, LocalDateTime startTime) {
+        this.name = name;
+        this.description = description;
+        this.status = status;
+        this.duration = duration;
+        this.startTime = startTime;
+    }
+
+    public Task(String name, String description, int taskId, Status status, Duration duration, LocalDateTime startTime) {
+        this.name = name;
+        this.description = description;
+        this.taskId = taskId;
+        this.status = status;
+        this.duration = duration;
+        this.startTime = startTime;
     }
 
     public String getName() {
@@ -73,6 +94,25 @@ public class Task {
         this.taskType = taskType;
     }
 
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return startTime.plus(duration);
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -94,6 +134,8 @@ public class Task {
                 "," + getTaskType().toString() +
                 "," + getName() +
                 "," + getStatus() +
-                "," + getDescription();
+                "," + getDescription() +
+                "," + getDuration() +
+                "," + getStartTime();
     }
 }
