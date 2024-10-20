@@ -183,7 +183,6 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteSubTaskById(int id) {
         SubTask newSubTask = getSubTaskById(id);
         Epic newEpic = epic.get(newSubTask.getEpicById());
-     //   newEpic.removeSubTaskByEpicId(id);
         calculateDurationAndTime(newEpic);
         prioritizedTasks.removeIf(subtask -> subtask.equals(getSubTaskById(id)));
         subTask.remove(id);
@@ -210,9 +209,8 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     private void updateStatus(Epic epic) {
-        // Получаем список подзадач эпика
         List<SubTask> subTasks = epic.getSubTaskList().stream()
-                .map(subTaskId -> subTask.get(subTaskId))  // Преобразуем идентификаторы в объекты подзадач
+                .map(subTaskId -> subTask.get(subTaskId))
                 .collect(Collectors.toList());
 
         if (subTasks.isEmpty()) {

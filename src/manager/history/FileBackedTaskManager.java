@@ -14,7 +14,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private final File file;
 
-    private static final String header = "id,type,name,status,description,epic,duration,startTime";
+    private static final String Header = "id,type,name,status,description,epic,duration,startTime";
 
     private static String fileName = "sprint8.csv";
 
@@ -103,7 +103,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     public void save() {
         try (Writer writer = new BufferedWriter(new FileWriter(fileName))) {
-            writer.write(header + "\n");
+            writer.write(Header + "\n");
 
             saveTasks(writer);
 
@@ -189,7 +189,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                if (line.isBlank() || line.equals(fileBackedTaskManager.header)) {
+                if (line.isBlank() || line.equals(fileBackedTaskManager.Header)) {
                     continue;
                 }
 
@@ -213,11 +213,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FileBackedTaskManager that = (FileBackedTaskManager) o;
-        return Objects.equals(file, that.file) && Objects.equals(header, that.header);
+        return Objects.equals(file, that.file) && Objects.equals(Header, that.Header);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(file, header);
+        return Objects.hash(file, Header);
     }
 }

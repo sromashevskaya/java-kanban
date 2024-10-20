@@ -27,13 +27,9 @@ public class Epic extends Task {
 
     public void setSubTaskList(SubTask subTask) {
         subTaskList.add(subTask.getTaskId());
-        if (subTask.getStartTime() == null) {
-            //     return;
-        }
     }
 
     public ArrayList<Integer> getSubTaskList() {
-        //  return subTaskList;
         return new ArrayList<>(subTaskList);
     }
 
