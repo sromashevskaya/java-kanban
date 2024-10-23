@@ -55,7 +55,7 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
             switch (pathLength) {
                 case 2 -> {
                     taskManager.createTask(task);
-                    sendText(exchange, String.valueOf(task));
+                    sendText(exchange, task.toString());
                 }
                 case 3 -> {
                     taskManager.updateTask(task);
